@@ -1,0 +1,45 @@
+# Intent specialty map wins over capability routing when matched.
+# Pins are capability-honest unless the task is low-stakes (slogan → gpt2-xl).
+
+intent_priority: true
+
+intents:
+  code:
+    model: phi3:mini
+    patterns:
+      - "(?i)\\b(code|coding|python|javascript|typescript|bug|debug|function|refactor|compile|algorithm)\\b"
+  story:
+    model: qwen2.5:3b
+    patterns:
+      - "(?i)\\b(story|stories|poem|poetry|creative|fiction|narrative|fairy tale)\\b"
+  translate:
+    model: qwen2.5:0.5b
+    patterns:
+      - "(?i)\\b(translate|translation|into (spanish|french|german|hindi|japanese))\\b"
+  slogan:
+    model: gpt2-xl
+    patterns:
+      - "(?i)\\b(slogan|tagline|catchphrase|one[- ]liner)\\b"
+
+complexity:
+  # Score in [0, 1] → tier
+  thresholds:
+    tiny: 0.20      # < 0.20
+    small: 0.45     # < 0.45
+    medium: 0.70    # < 0.70
+    large: 1.01     # else
+  weights:
+    length: 0.35
+    multi_step: 0.35
+    difficulty_keywords: 0.30
+  multi_step_patterns:
+    - "(?i)step by step"
+    - "(?i)\\b(compare|contrast|analyze|analyse|explain why|walk me through)\\b"
+    - "(?i)^\\s*\\d+[\\).]"
+    - "(?i)\\b(first,.+then|on one hand|pros and cons)\\b"
+  difficulty_patterns:
+    - "(?i)\\b(prove|architect|design a system|refactor entire|optimize|derive|theorem|complexity)\\b"
+    - "(?i)\\b(trade-?offs|edge cases|production[- ]ready)\\b"
+  trivial_patterns:
+    - "(?i)^(hi|hello|hey|thanks|thank you|ok|okay|yo)\\b"
+    - "(?i)\\b(how are you|good morning|good night)\\b"

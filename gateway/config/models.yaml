@@ -1,0 +1,43 @@
+# Capability ladder (ascending intelligence — NOT param count).
+# gpt2-xl is the largest GPT-2 but the weakest chat model here.
+# phi3:mini is the strongest local tier we run.
+
+defaults:
+  fallback_model: qwen2.5:0.5b
+  ollama_base_url: http://localhost:11434/v1
+  request_timeout_s: 120
+
+models:
+  gpt2-xl:
+    provider: gpt2_local
+    runtime_id: openai-community/gpt2-xl
+    tier: tiny
+    capability: 1
+    description: "Largest GPT-2 (1.5B). Weakest instruct quality in this ladder."
+
+  qwen2.5:0.5b:
+    provider: ollama
+    runtime_id: qwen2.5:0.5b
+    tier: small
+    capability: 2
+    description: "Small modern instruct model for simple Q&A."
+
+  qwen2.5:3b:
+    provider: ollama
+    runtime_id: qwen2.5:3b
+    tier: medium
+    capability: 3
+    description: "Mid-tier Qwen for moderate multi-step answers."
+
+  phi3:mini:
+    provider: ollama
+    runtime_id: phi3:mini
+    tier: large
+    capability: 4
+    description: "Strongest local tier — coding, reasoning, careful writing."
+
+tiers:
+  tiny: gpt2-xl
+  small: qwen2.5:0.5b
+  medium: qwen2.5:3b
+  large: phi3:mini
